@@ -87,7 +87,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)configuration;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -147,6 +147,13 @@
     <ProjectReference Include="..\GLAD\GLAD.vcxproj">
       <Project>{7b3be2ba-c494-40b9-850a-26581724036f}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\STB_IMAGE\STB_IMAGE.vcxproj">
+      <Project>{940644fe-4aac-4c5e-92d6-4c3e055b8566}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="pbr.fs" />
+    <None Include="pbr.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

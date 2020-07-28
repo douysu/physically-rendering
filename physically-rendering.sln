@@ -4,8 +4,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "physically-rendering", "physically-rendering\physically-rendering.vcxproj", "{B4B7BC7F-A200-4D4A-BA81-B031DE9D3A0F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7B3BE2BA-C494-40B9-850A-26581724036F} = {7B3BE2BA-C494-40B9-850A-26581724036F}
+		{940644FE-4AAC-4C5E-92D6-4C3E055B8566} = {940644FE-4AAC-4C5E-92D6-4C3E055B8566}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GLAD", "GLAD\GLAD.vcxproj", "{7B3BE2BA-C494-40B9-850A-26581724036F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "STB_IMAGE", "STB_IMAGE\STB_IMAGE.vcxproj", "{940644FE-4AAC-4C5E-92D6-4C3E055B8566}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +37,14 @@ Global
 		{7B3BE2BA-C494-40B9-850A-26581724036F}.Release|x64.Build.0 = Release|x64
 		{7B3BE2BA-C494-40B9-850A-26581724036F}.Release|x86.ActiveCfg = Release|Win32
 		{7B3BE2BA-C494-40B9-850A-26581724036F}.Release|x86.Build.0 = Release|Win32
+		{940644FE-4AAC-4C5E-92D6-4C3E055B8566}.Debug|x64.ActiveCfg = Debug|x64
+		{940644FE-4AAC-4C5E-92D6-4C3E055B8566}.Debug|x64.Build.0 = Debug|x64
+		{940644FE-4AAC-4C5E-92D6-4C3E055B8566}.Debug|x86.ActiveCfg = Debug|Win32
+		{940644FE-4AAC-4C5E-92D6-4C3E055B8566}.Debug|x86.Build.0 = Debug|Win32
+		{940644FE-4AAC-4C5E-92D6-4C3E055B8566}.Release|x64.ActiveCfg = Release|x64
+		{940644FE-4AAC-4C5E-92D6-4C3E055B8566}.Release|x64.Build.0 = Release|x64
+		{940644FE-4AAC-4C5E-92D6-4C3E055B8566}.Release|x86.ActiveCfg = Release|Win32
+		{940644FE-4AAC-4C5E-92D6-4C3E055B8566}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
