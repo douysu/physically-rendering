@@ -32,7 +32,7 @@ const unsigned int SCR_WIDTH = 1280;
 const unsigned int SCR_HEIGHT = 720;
 
 // camera
-Camera camera(glm::vec3(0.0f, 0.0f, 10.0f));
+Camera camera(glm::vec3(0.0f, 0.0f, 15.0f));
 float lastX = 800.0f / 2.0;
 float lastY = 600.0 / 2.0;
 bool firstMouse = true;
@@ -80,8 +80,8 @@ int main()
     Shader shader("pbr.vs", "pbr.fs");
 
     shader.use();
-    //shader.setVec3("albedo", 0.5f, 0.0f, 0.0f);
-    //shader.setFloat("ao", 1.0f);
+    shader.setVec3("albedo", 0.5f, 0.0f, 0.0f);
+    shader.setFloat("ao", 1.0f);
 
     // lights
     // ------
@@ -129,10 +129,10 @@ int main()
         glm::mat4 model = glm::mat4(1.0f);
         for (int row = 0; row < nrRows; ++row)
         {
-            //shader.setFloat("metallic", (float)row / (float)nrRows);
+            shader.setFloat("metallic", (float)row / (float)nrRows);
             for (int col = 0; col < nrColumns; ++col)
             {
-                //shader.setFloat("roughness", glm::clamp((float)col / (float)nrColumns, 0.05f, 1.0f));
+                shader.setFloat("roughness", glm::clamp((float)col / (float)nrColumns, 0.05f, 1.0f));
 
                 model = glm::mat4(1.0f);
                 model = glm::translate(model, glm::vec3(
@@ -145,7 +145,7 @@ int main()
             }
         }
 
-       /* for (unsigned int i = 0; i < sizeof(lightPositions) / sizeof(lightPositions[0]); ++i)
+       for (unsigned int i = 0; i < sizeof(lightPositions) / sizeof(lightPositions[0]); ++i)
         {
             glm::vec3 newPos = lightPositions[i] + glm::vec3(sin(glfwGetTime() * 5.0) * 5.0, 0.0, 0.0);
             newPos = lightPositions[i];
@@ -157,7 +157,7 @@ int main()
             model = glm::scale(model, glm::vec3(0.5f));
             shader.setMat4("model", model);
             renderSphere();
-        }*/
+        }
 
         glfwSwapBuffers(window);
         glfwPollEvents();
