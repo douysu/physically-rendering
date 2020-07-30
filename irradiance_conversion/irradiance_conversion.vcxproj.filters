@@ -32,5 +32,11 @@
     <None Include="cubemap.vs">
       <Filter>源文件</Filter>
     </None>
+    <None Include="background.vs">
+      <Filter>源文件</Filter>
+    </None>
+    <None Include="background.fs">
+      <Filter>源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>

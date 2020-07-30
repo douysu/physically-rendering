@@ -144,6 +144,8 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="background.fs" />
+    <None Include="background.vs" />
     <None Include="cubemap.vs" />
     <None Include="equirectangular_to_cubemap.fs" />
     <None Include="pbr.fs" />
