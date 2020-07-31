@@ -147,6 +147,8 @@
   <ItemGroup>
     <None Include="background.fs" />
     <None Include="background.vs" />
+    <None Include="brdf.fs" />
+    <None Include="brdf.vs" />
     <None Include="cubemap.vs" />
     <None Include="equirectangular_to_cubemap.fs" />
     <None Include="irradiance_convolution.fs" />

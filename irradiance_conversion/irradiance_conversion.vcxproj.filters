@@ -44,5 +44,11 @@
     <None Include="prefilter.fs">
       <Filter>源文件</Filter>
     </None>
+    <None Include="brdf.fs">
+      <Filter>源文件</Filter>
+    </None>
+    <None Include="brdf.vs">
+      <Filter>源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>
