@@ -148,6 +148,7 @@
     <None Include="background.vs" />
     <None Include="cubemap.vs" />
     <None Include="equirectangular_to_cubemap.fs" />
+    <None Include="irradiance_convolution.fs" />
     <None Include="pbr.fs" />
     <None Include="pbr.vs" />
   </ItemGroup>

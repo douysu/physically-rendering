@@ -38,5 +38,8 @@
     <None Include="background.fs">
       <Filter>源文件</Filter>
     </None>
+    <None Include="irradiance_convolution.fs">
+      <Filter>源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>
