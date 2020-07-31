@@ -256,6 +256,10 @@ int main()
         pbrShader.setMat4("view", view);
         pbrShader.setVec3("camPos", camera.Position);
 
+        // irradiance map
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap);
+
         glm::mat4 model = glm::mat4(1.0f);
         for (int row = 0; row < nrRows; ++row)
         {

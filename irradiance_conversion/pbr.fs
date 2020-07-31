@@ -11,6 +11,9 @@ uniform vec3 lightColors[4];
 // camera
 uniform vec3 camPos;
 
+// IBL
+uniform samplerCube irradianceMap;
+
 // material
 uniform vec3 albedo;
 uniform float metallic;
@@ -100,7 +103,15 @@ void main()
         Lo += (kD * albedo / PI + specular) * radiance * NdotL;
 	}
 
-    vec3 ambient = vec3(0.03) * albedo * ao;
+    // ambient lighting
+    vec3 kS = fresnelSchlick(max(dot(N, V), 0.0), F0);
+    vec3 kD = 1.0 - kS;
+    kD *= 1.0 - metallic;
+    vec3 irradiance = texture(irradianceMap, N).rgb;
+    vec3 diffuse = irradiance * albedo;
+
+
+    vec3 ambient = (kD * diffuse) * ao;
     vec3 color   = ambient + Lo;
     
     // HDR
