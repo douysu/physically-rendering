@@ -79,6 +79,8 @@ int main()
 
     glDepthFunc(GL_LEQUAL);
 
+    glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+
     // Shader
     Shader pbrShader("pbr.vs", "pbr.fs");
     Shader equirectangularToCubemapShader("cubemap.vs", "equirectangular_to_cubemap.fs");
@@ -155,7 +157,7 @@ int main()
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     // pbr framebuffer camera
@@ -187,9 +189,10 @@ int main()
 
         renderCube();
     }
-
-    // draw init scene
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
+    glGenerateMipmap(GL_TEXTURE_CUBE_MAP);  
 
     // irradiance cubemap
     unsigned int irradianceMap;
@@ -202,7 +205,7 @@ int main()
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
@@ -345,7 +348,7 @@ int main()
        backgroundShader.use();
        backgroundShader.setMat4("view", view);
        glActiveTexture(GL_TEXTURE0);
-       glBindTexture(GL_TEXTURE_CUBE_MAP, prefilterMap);
+       glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
        renderCube();
 
        glfwSwapBuffers(window);
