@@ -406,9 +406,9 @@ int main()
         glBindTexture(GL_TEXTURE_2D, modelAoMapModel);
 
         model = glm::mat4(1.0f);
-        model = glm::scale(model, glm::vec3(0.1, 0.1, 0.1));
+        model = glm::scale(model, glm::vec3(0.03, 0.03, 0.03));
         pbrShader.setMat4("model", model);
-        //ourModel.Draw(pbrShader);
+        ourModel.Draw(pbrShader);
 
 
         //float radian = -glfwGetTime() * 0.6f;
@@ -505,7 +505,6 @@ int main()
             model = glm::translate(model, newPos);
             model = glm::scale(model, glm::vec3(0.5f));
             pbrShader.setMat4("model", model);
-            renderSphere();
         }
 
        // cubemap
