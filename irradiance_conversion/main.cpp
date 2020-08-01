@@ -29,13 +29,14 @@ void renderSphere();
 void renderCube();
 void renderQuad();
 void renderPbrSphere(unsigned int albedoMap, unsigned int normalMap, unsigned int metallicMap, unsigned int roughnessMap, unsigned int aoMap, float circleR, float theta, float radian, Shader& pbrShader);
+void renderPbrModel(unsigned int albedoMap, unsigned int normalMap, unsigned int metallicMap, unsigned int roughnessMap, unsigned int aoMap, Shader& pbrShader, Model inputModel, glm::mat4 model);
 
 // settings
 const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
 
 // camera
-Camera camera(glm::vec3(0.0f, 0.0f, 10.0f));
+Camera camera(glm::vec3(5.0f, 0.0f, 15.0f));
 float lastX = 800.0f / 2.0;
 float lastY = 600.0 / 2.0;
 bool firstMouse = true;
@@ -104,44 +105,25 @@ int main()
     backgroundShader.use();
     backgroundShader.setInt("environmentMap", 0);
 
-    // pbr texture
-    /*unsigned int ironAlbedoMap = loadTexture(FileSystem::getPath("resources/textures/pbr/rusted_iron/albedo.png").c_str());
-    unsigned int ironNormalMap = loadTexture(FileSystem::getPath("resources/textures/pbr/rusted_iron/normal.png").c_str());
-    unsigned int ironMetallicMap = loadTexture(FileSystem::getPath("resources/textures/pbr/rusted_iron/metallic.png").c_str());
-    unsigned int ironRoughnessMap = loadTexture(FileSystem::getPath("resources/textures/pbr/rusted_iron/roughness.png").c_str());
-    unsigned int ironAOMap = loadTexture(FileSystem::getPath("resources/textures/pbr/rusted_iron/ao.png").c_str());*/
-
-    // gold
-    unsigned int goldAlbedoMap = loadTexture(FileSystem::getPath("resources/textures/pbr/gold/albedo.png").c_str());
-    unsigned int goldNormalMap = loadTexture(FileSystem::getPath("resources/textures/pbr/gold/normal.png").c_str());
-    unsigned int goldMetallicMap = loadTexture(FileSystem::getPath("resources/textures/pbr/gold/metallic.png").c_str());
-    unsigned int goldRoughnessMap = loadTexture(FileSystem::getPath("resources/textures/pbr/gold/roughness.png").c_str());
-    unsigned int goldAOMap = loadTexture(FileSystem::getPath("resources/textures/pbr/gold/ao.png").c_str());
-
-    // plastic
-    //unsigned int plasticAlbedoMap = loadTexture(FileSystem::getPath("resources/textures/pbr/plastic/albedo.png").c_str());
-    //unsigned int plasticNormalMap = loadTexture(FileSystem::getPath("resources/textures/pbr/plastic/normal.png").c_str());
-    //unsigned int plasticMetallicMap = loadTexture(FileSystem::getPath("resources/textures/pbr/plastic/metallic.png").c_str());
-    //unsigned int plasticRoughnessMap = loadTexture(FileSystem::getPath("resources/textures/pbr/plastic/roughness.png").c_str());
-    //unsigned int plasticAOMap = loadTexture(FileSystem::getPath("resources/textures/pbr/plastic/ao.png").c_str());
-
-    //// wall
-    //unsigned int wallAlbedoMap = loadTexture(FileSystem::getPath("resources/textures/pbr/wall/albedo.png").c_str());
-    //unsigned int wallNormalMap = loadTexture(FileSystem::getPath("resources/textures/pbr/wall/normal.png").c_str());
-    //unsigned int wallMetallicMap = loadTexture(FileSystem::getPath("resources/textures/pbr/wall/metallic.png").c_str());
-    //unsigned int wallRoughnessMap = loadTexture(FileSystem::getPath("resources/textures/pbr/wall/roughness.png").c_str());
-    //unsigned int wallAOMap = loadTexture(FileSystem::getPath("resources/textures/pbr/wall/ao.png").c_str());
-
+    const int sphereNum = 8;
+    std::string inputPath = "resources/textures/pbr";
+    std::string twoInputPath[] = { "/gold/", "/slipperystonework/", "/ornate-celtic-gold/", "/bamboo-wood-semigloss/", "/wornpaintedcement/", "/paint-peeling/", "/Titanium-Scuffed/", "/wrinkled-paper/" };
+    std::string allTextureName[] = { "albedo.png", "normal.png", "metallic.png", "roughness.png", "ao.png" };
+    unsigned int sphereMap[sphereNum][5];
+    
+    for (int i = 0; i < sphereNum; i++)
+    {
+        std::string tempInputPath = inputPath + twoInputPath[i];
+        for (int j = 0; j < 5; j++)
+        {
+            std::string lastInputPath = tempInputPath + allTextureName[j];
+            sphereMap[i][j] = loadTexture(FileSystem::getPath(lastInputPath).c_str());
+        }
+    }
 
     stbi_set_flip_vertically_on_load(false);
 
-    /*int modelAlbedoMap = loadTexture(FileSystem::getPath("resources/objects/bakemyscan/albedo.jpg").c_str());
-    int modelNormalMap = loadTexture(FileSystem::getPath("resources/objects/bakemyscan/normal.jpg").c_str());
-    int modelMetallicMap = loadTexture(FileSystem::getPath("resources/objects/bakemyscan/metallic.jpg").c_str());
-    int modelRoughnessMap = loadTexture(FileSystem::getPath("resources/objects/bakemyscan/roughness.jpg").c_str());
-    int modelAoMapModel = loadTexture(FileSystem::getPath("resources/objects/bakemyscan/ao.jpg").c_str());*/
-
-    // init head
+    // init model pbr texture
     int modelAlbedoMap = loadTexture(FileSystem::getPath("resources/objects/free-sci-fi-helmet/head_albedo.jpg").c_str());
     int modelNormalMap = loadTexture(FileSystem::getPath("resources/objects/free-sci-fi-helmet/head_normal.png").c_str());
     int modelMetallicMap = loadTexture(FileSystem::getPath("resources/objects/free-sci-fi-helmet/head_metallic.jpg").c_str());
@@ -154,9 +136,17 @@ int main()
     int modelRoughnessMap2 = loadTexture(FileSystem::getPath("resources/objects/free-sci-fi-helmet/visor01_roughness.jpg").c_str());
     int modelAoMapModel2 = loadTexture(FileSystem::getPath("resources/objects/free-sci-fi-helmet/visor01_ao.jpg").c_str());
 
+    int modelAlbedoMap3 = loadTexture(FileSystem::getPath("resources/objects/bakemyscan/albedo.jpg").c_str());
+    int modelNormalMap3 = loadTexture(FileSystem::getPath("resources/objects/bakemyscan/normal.jpg").c_str());
+    int modelMetallicMap3 = loadTexture(FileSystem::getPath("resources/objects/bakemyscan/metallic.jpg").c_str());
+    int modelRoughnessMap3 = loadTexture(FileSystem::getPath("resources/objects/bakemyscan/roughness.jpg").c_str());
+    int modelAoMapModel3 = loadTexture(FileSystem::getPath("resources/objects/bakemyscan/ao.jpg").c_str());
+
     // init model
     Model head(FileSystem::getPath("resources/objects/free-sci-fi-helmet/head.ply"));
     Model visor(FileSystem::getPath("resources/objects/free-sci-fi-helmet/visor01.ply"));
+    Model bakemyscan(FileSystem::getPath("resources/objects/bakemyscan/bakemyscan.ply"));
+
     // lights
     // ------
     glm::vec3 lightPositions[] = {
@@ -189,7 +179,6 @@ int main()
     // load pbr
     stbi_set_flip_vertically_on_load(true);
     int width, height, nrComponents;
-    // Brooklyn_Bridge_Planks_2k newport_loft LA_Downtown_Afternoon_Fishing_3k Stadium_Center_3k 
     float *data = stbi_loadf(FileSystem::getPath("resources/textures/hdr/Brooklyn_Bridge_Planks_2k.hdr").c_str(), &width, &height, &nrComponents, 0);
     unsigned int hdrTexture;
     if (data)
@@ -407,51 +396,24 @@ int main()
         glActiveTexture(GL_TEXTURE2);
         glBindTexture(GL_TEXTURE_2D, brdfLUTTexture);
 
-        glActiveTexture(GL_TEXTURE3);
-        glBindTexture(GL_TEXTURE_2D, modelAlbedoMap);
-        glActiveTexture(GL_TEXTURE4);
-        glBindTexture(GL_TEXTURE_2D, modelNormalMap);
-        glActiveTexture(GL_TEXTURE5);
-        glBindTexture(GL_TEXTURE_2D, modelMetallicMap);
-        glActiveTexture(GL_TEXTURE6);
-        glBindTexture(GL_TEXTURE_2D, modelRoughnessMap);
-        glActiveTexture(GL_TEXTURE7);
-        glBindTexture(GL_TEXTURE_2D, modelAoMapModel);
-
         model = glm::mat4(1.0f);
-        //model = glm::scale(model, glm::vec3(0.03, 0.03, 0.03));
-        pbrShader.setMat4("model", model);
-        head.Draw(pbrShader);
+        model = glm::scale(model, glm::vec3(2.8, 2.8, 2.8));
+        model = glm::rotate(model, glm::radians(25.0f), glm::vec3(0.0, 1.0, 0.0));
+        renderPbrModel(modelAlbedoMap, modelNormalMap, modelMetallicMap, modelRoughnessMap, modelAoMapModel, pbrShader, head, model);
+        renderPbrModel(modelAlbedoMap2, modelNormalMap2, modelMetallicMap2, modelRoughnessMap2, modelAoMapModel2, pbrShader, visor, model);
 
-        glActiveTexture(GL_TEXTURE3);
-        glBindTexture(GL_TEXTURE_2D, modelAlbedoMap2);
-        glActiveTexture(GL_TEXTURE4);
-        glBindTexture(GL_TEXTURE_2D, modelNormalMap2);
-        glActiveTexture(GL_TEXTURE5);
-        glBindTexture(GL_TEXTURE_2D, modelMetallicMap2);
-        glActiveTexture(GL_TEXTURE6);
-        glBindTexture(GL_TEXTURE_2D, modelRoughnessMap2);
-        glActiveTexture(GL_TEXTURE7);
-        glBindTexture(GL_TEXTURE_2D, modelAoMapModel2);
+        model = glm::mat4(1.0f);       
+        model = glm::translate(model, glm::vec3(10, 0, 0));
+        model = glm::scale(model, glm::vec3(9, 9, 9));
+        renderPbrModel(modelAlbedoMap3, modelNormalMap3, modelMetallicMap3, modelRoughnessMap3, modelAoMapModel3, pbrShader, bakemyscan, model);
 
-        model = glm::mat4(1.0f);
-        //model = glm::scale(model, glm::vec3(0.03, 0.03, 0.03));
-        pbrShader.setMat4("model", model);
-        visor.Draw(pbrShader);
+        float radian = -glfwGetTime() * 0.4f;
 
-
-
-        float radian = -glfwGetTime() * 0.6f;
-        renderPbrSphere(goldAlbedoMap, goldNormalMap, goldMetallicMap, goldRoughnessMap, goldAOMap, circleR, theta[0], radian, pbrShader);
-        renderPbrSphere(goldAlbedoMap, goldNormalMap, goldMetallicMap, goldRoughnessMap, goldAOMap, circleR, theta[1], radian, pbrShader);
-        renderPbrSphere(goldAlbedoMap, goldNormalMap, goldMetallicMap, goldRoughnessMap, goldAOMap, circleR, theta[2], radian, pbrShader);
-        renderPbrSphere(goldAlbedoMap, goldNormalMap, goldMetallicMap, goldRoughnessMap, goldAOMap, circleR, theta[3], radian, pbrShader);
-        renderPbrSphere(goldAlbedoMap, goldNormalMap, goldMetallicMap, goldRoughnessMap, goldAOMap, circleR, theta[4], radian, pbrShader);
-        renderPbrSphere(goldAlbedoMap, goldNormalMap, goldMetallicMap, goldRoughnessMap, goldAOMap, circleR, theta[5], radian, pbrShader);
-        renderPbrSphere(goldAlbedoMap, goldNormalMap, goldMetallicMap, goldRoughnessMap, goldAOMap, circleR, theta[6], radian, pbrShader);
-        renderPbrSphere(goldAlbedoMap, goldNormalMap, goldMetallicMap, goldRoughnessMap, goldAOMap, circleR, theta[7], radian, pbrShader);
-       
-
+        for (int i = 0; i < sphereNum; i++)
+        {
+            renderPbrSphere(sphereMap[i][0], sphereMap[i][1], sphereMap[i][2], sphereMap[i][3], sphereMap[i][4], circleR, theta[i], radian, pbrShader);
+        }
+      
        for (unsigned int i = 0; i < sizeof(lightPositions) / sizeof(lightPositions[0]); ++i)
         {
             glm::vec3 newPos = lightPositions[i] + glm::vec3(sin(glfwGetTime() * 5.0) * 5.0, 0.0, 0.0);
@@ -506,6 +468,24 @@ void renderPbrSphere(unsigned int albedoMap, unsigned int normalMap, unsigned in
     model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
     pbrShader.setMat4("model", model);
     renderSphere();
+}
+
+void renderPbrModel(unsigned int albedoMap, unsigned int normalMap, unsigned int metallicMap, unsigned int roughnessMap, unsigned int aoMap, Shader& pbrShader, Model inputModel, glm::mat4 model)
+{
+    // pbr texture
+    glActiveTexture(GL_TEXTURE3);
+    glBindTexture(GL_TEXTURE_2D, albedoMap);
+    glActiveTexture(GL_TEXTURE4);
+    glBindTexture(GL_TEXTURE_2D, normalMap);
+    glActiveTexture(GL_TEXTURE5);
+    glBindTexture(GL_TEXTURE_2D, metallicMap);
+    glActiveTexture(GL_TEXTURE6);
+    glBindTexture(GL_TEXTURE_2D, roughnessMap);
+    glActiveTexture(GL_TEXTURE7);
+    glBindTexture(GL_TEXTURE_2D, aoMap);
+
+    pbrShader.setMat4("model", model);
+    inputModel.Draw(pbrShader);
 }
 
 void processInput(GLFWwindow* window)
