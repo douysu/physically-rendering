@@ -53,7 +53,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // glfw window creation
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "PBR Render(IBL)", NULL, NULL);
     glfwMakeContextCurrent(window);
     if (window == NULL)
     {
@@ -94,11 +94,21 @@ int main()
     pbrShader.setInt("irradianceMap", 0);
     pbrShader.setInt("prefilterMap", 1);
     pbrShader.setInt("brdfLUT", 2);
-    pbrShader.setVec3("albedo", 0.5f, 0.0f, 0.0f);
-    pbrShader.setFloat("ao", 1.0f);
+    pbrShader.setInt("albedoMap", 3);
+    pbrShader.setInt("normalMap", 4);
+    pbrShader.setInt("metallicMap", 5);
+    pbrShader.setInt("roughnessMap", 6);
+    pbrShader.setInt("aoMap", 7);
 
     backgroundShader.use();
     backgroundShader.setInt("environmentMap", 0);
+
+    // pbr texture
+    unsigned int ironAlbedoMap = loadTexture(FileSystem::getPath("resources/textures/pbr/rusted_iron/albedo.png").c_str());
+    unsigned int ironNormalMap = loadTexture(FileSystem::getPath("resources/textures/pbr/rusted_iron/normal.png").c_str());
+    unsigned int ironMetallicMap = loadTexture(FileSystem::getPath("resources/textures/pbr/rusted_iron/metallic.png").c_str());
+    unsigned int ironRoughnessMap = loadTexture(FileSystem::getPath("resources/textures/pbr/rusted_iron/roughness.png").c_str());
+    unsigned int ironAOMap = loadTexture(FileSystem::getPath("resources/textures/pbr/rusted_iron/ao.png").c_str());
 
     // lights
     // ------
@@ -344,24 +354,21 @@ int main()
         glActiveTexture(GL_TEXTURE2);
         glBindTexture(GL_TEXTURE_2D, brdfLUTTexture);
 
-        glm::mat4 model = glm::mat4(1.0f);
-        for (int row = 0; row < nrRows; ++row)
-        {
-            pbrShader.setFloat("metallic", (float)row / (float)nrRows);
-            for (int col = 0; col < nrColumns; ++col)
-            {
-                pbrShader.setFloat("roughness", glm::clamp((float)col / (float)nrColumns, 0.05f, 1.0f));
+        // pbr texture
+        glActiveTexture(GL_TEXTURE3);
+        glBindTexture(GL_TEXTURE_2D, ironAlbedoMap);
+        glActiveTexture(GL_TEXTURE4);
+        glBindTexture(GL_TEXTURE_2D, ironNormalMap);
+        glActiveTexture(GL_TEXTURE5);
+        glBindTexture(GL_TEXTURE_2D, ironMetallicMap);
+        glActiveTexture(GL_TEXTURE6);
+        glBindTexture(GL_TEXTURE_2D, ironRoughnessMap);
+        glActiveTexture(GL_TEXTURE7);
+        glBindTexture(GL_TEXTURE_2D, ironAOMap);
 
-                model = glm::mat4(1.0f);
-                model = glm::translate(model, glm::vec3(
-                    (col - (nrColumns / 2)) * spacing,
-                    (row - (nrRows / 2)) * spacing,
-                    0.0f
-                ));
-                pbrShader.setMat4("model", model);
-                renderSphere();
-            }
-        }
+        glm::mat4 model = glm::mat4(1.0f);
+        pbrShader.setMat4("model", model);
+        renderSphere();
 
        for (unsigned int i = 0; i < sizeof(lightPositions) / sizeof(lightPositions[0]); ++i)
         {
