@@ -28,8 +28,8 @@ unsigned int loadTexture(const char* path);
 void renderSphere();
 
 // settings
-const unsigned int SCR_WIDTH = 1280;
-const unsigned int SCR_HEIGHT = 720;
+const unsigned int SCR_WIDTH = 1920;
+const unsigned int SCR_HEIGHT = 1080;
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 15.0f));
@@ -126,24 +126,24 @@ int main()
         shader.setMat4("view", view);
         shader.setVec3("camPos", camera.Position);
 
-        glm::mat4 model = glm::mat4(1.0f);
-        for (int row = 0; row < nrRows; ++row)
-        {
-            shader.setFloat("metallic", (float)row / (float)nrRows);
-            for (int col = 0; col < nrColumns; ++col)
-            {
-                shader.setFloat("roughness", glm::clamp((float)col / (float)nrColumns, 0.05f, 1.0f));
+        shader.setFloat("metallic", 0.0);
+        shader.setFloat("roughness", 0.0);
 
-                model = glm::mat4(1.0f);
-                model = glm::translate(model, glm::vec3(
-                    (col - (nrColumns / 2)) * spacing,
-                    (row - (nrRows / 2)) * spacing,
-                    0.0f
-                ));
-                shader.setMat4("model", model);
-                renderSphere();
-            }
-        }
+        float circleR = 4.0f;
+        float radian = -glfwGetTime();
+        float px = circleR * cos(radian);
+        float py = circleR * sin(radian);
+
+
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(px, py, 0.0f));
+        model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
+        shader.setMat4("model", model);
+        renderSphere();
+
+        model = glm::mat4(1.0f);
+        shader.setMat4("model", model);
+        renderSphere();
 
        for (unsigned int i = 0; i < sizeof(lightPositions) / sizeof(lightPositions[0]); ++i)
         {
