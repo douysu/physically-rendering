@@ -5,6 +5,9 @@
 
 # personal
 
+irradiance_conversion
+lighting-texture
+
 # User-specific files
 *.rsuser
 *.suo

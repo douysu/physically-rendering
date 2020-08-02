@@ -15,16 +15,40 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <None Include="cubemap.vs">
       <Filter>源文件</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
+    </None>
+    <None Include="equirectangular_to_cubemap.fs">
+      <Filter>源文件</Filter>
+    </None>
+    <None Include="irradiance_convolution.fs">
+      <Filter>源文件</Filter>
+    </None>
     <None Include="pbr.fs">
       <Filter>源文件</Filter>
     </None>
     <None Include="pbr.vs">
       <Filter>源文件</Filter>
     </None>
+    <None Include="prefilter.fs">
+      <Filter>源文件</Filter>
+    </None>
+    <None Include="background.fs">
+      <Filter>源文件</Filter>
+    </None>
+    <None Include="background.vs">
+      <Filter>源文件</Filter>
+    </None>
+    <None Include="brdf.fs">
+      <Filter>源文件</Filter>
+    </None>
+    <None Include="brdf.vs">
+      <Filter>源文件</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
